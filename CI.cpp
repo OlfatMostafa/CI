@@ -642,7 +642,6 @@ void Anim(){
 			initf = true;
 
 		}
-		
 		else if ((fire[0] <= attacker[0] + 100 && fire[0] >= attacker[0]) && (fire[1] <= attacker[1] + 50 && fire[1] >= attacker[1] - 50)){
 			PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\pain.wav", 0, SND_FILENAME | SND_ASYNC);
 			value -= 10;
