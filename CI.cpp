@@ -17,31 +17,14 @@ int _tmain(int argc, _TCHAR* argv[])
 #include <glut.h>
 #include <ctime>
 
-int keyC = 0, speC = 0;
-int p0[2], p1[2], p2[2], p3[2];
-float attacker[2],  player[2], fire[2], obs[2], powerUp[2], defender[2];
-int obsCount = 0;
-bool fire2 = false, rotateLeftp = false, rotateRightp = false, rotateLefta = false, rotateRighta = false, initf = true, inito = true, defRev = false;
-bool obsAttacker = false, fireToggle = false;
-int lives = 1;
-float attackerHealthPoint;
-float t = 0, r1 = 0;
-int tar = 4;
-bool rev = false, rm = false,destroy = false, lose = true;
-int randMotion = 0, score = 0;
-int randPowerupTime = 0;
-float fireMov = 0;
-float value, max_value, progress, progressBarWidth;
-int powerupTranslationX[2];
-int powerupTranslationY[2];
-int powerupTimer;
-bool powerupToggle = false;
-bool powerupActivate = false;
-bool defenderToTheRescue = false;
-int defenderToTheRescueT = 0;
-int rotationAngleP = 0;
-int rotationAngleA = 0;
-int window_valid = 1;
+int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
+powerupTimer, defenderToTheRescueT, rotationAngleP, rotationAngleA;
+
+float attacker[2], player[2], fire[2], obs[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
+r1, fireMov, value, max_value, progress, progressBarWidth;
+
+bool fire2, rotateLeftp, rotateRightp, rotateLefta, rotateRighta, defRev, powerupToggle, powerupActivate, defenderToTheRescue, rev, rm, destroy,
+obsAttacker, fireToggle, lose = true, initf = true, inito = true;
 
 void destroy_window() {
 
@@ -525,6 +508,7 @@ void Anim(){
 		else
 		{
 			randPowerupTime = 1 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (100)));
+			powerupTranslationX[1] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (500)));
 			powerupToggle = true;
 		}
 	}
@@ -544,6 +528,7 @@ void Anim(){
 	else
 	{
 		powerupTimer = 1 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (100)));
+		powerupTranslationX[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (500)));
 		powerupToggle = false;
 	}
 	
