@@ -3,6 +3,7 @@
 using namespace std;
 #include "stdafx.h"
 
+
 void Anim();
 void Display();
 int _tmain(int argc, _TCHAR* argv[])
@@ -14,17 +15,25 @@ int _tmain(int argc, _TCHAR* argv[])
 #include <stdlib.h>
 #include <windows.h>
 #include <string.h>
+#include "TextureBuilder.h"
 #include <glut.h>
 #include <ctime>
 
+#define GLUT_KEY_ESCAPE 27
+GLuint texID ;
+
+int rep = 1;
 int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
-powerupTimer, defenderToTheRescueT, rotationAngleP, rotationAngleA;
+powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA;
 
 float attacker[2], player[2], fire[2], obs[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
 r1, fireMov, value, max_value, progress, progressBarWidth;
 
 bool fire2, rotateLeftp, rotateRightp, rotateLefta, rotateRighta, defRev, powerupToggle, powerupActivate, defenderToTheRescue, rev, rm, destroy,
 obsAttacker, fireToggle, lose = true, initf = true, inito = true;
+
+
+
 
 void destroy_window() {
 
@@ -231,9 +240,6 @@ void keyUp(unsigned char k, int x, int y)//keyboard up function is called whenev
 void main(int argc, char** argr) {
 	glutInit(&argc, argr);
 
-	glutInitWindowSize(1000, 600);
-	//	glutInitWindowPosition(150, 150);
-
 	p0[0] = 5;
 	p0[1] = 560;
 
@@ -249,6 +255,8 @@ void main(int argc, char** argr) {
 	attacker[0] = 400;
 	attacker[1] = 400;
 
+	obs[0] = attacker[0];
+	obs[1] = attacker[1];
 
 	player[0] = 500;
 	player[1] = 0;
@@ -262,27 +270,59 @@ void main(int argc, char** argr) {
 	max_value = 100.0;
 	randPowerupTime = 1 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (100)));
 	powerupTimer = 1 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (100)));
-	glutCreateWindow("OpenGL - 2D Template");
-	glutDisplayFunc(Display);
-	glutIdleFunc(Anim);
-	/*glutMotionFunc(mo);
-	glutMouseFunc(mou);*/
+	glutInitWindowSize(1000, 600);
+	//	glutInitWindowPosition(150, 150);
+	glutCreateWindow("CI");
+
+	glEnable(GL_TEXTURE_2D);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-	glClearColor(0, 0, 0, 0);
+	glutDisplayFunc(Display);
+	//glClearColor(0, 0, 0, 0);
 	gluOrtho2D(0.0, 1000, 0.0, 600);
 	glLineWidth(5.0);
+	glutIdleFunc(Anim);
 	glutKeyboardFunc(key);			//call the keyboard function
 	glutKeyboardUpFunc(keyUp);		//call the keyboard up function
 	glutSpecialFunc(spe);			//call the keyboard special keys function
 	glutSpecialUpFunc(speUp);		//call the keyboard special keys up function
+	glPushMatrix();
+	loadBMP(&texID, "E:/SEM7/Computer Graphics/textures/cc.bmp", true);
+	loadBMP(&texID+1, "E:/SEM7/Computer Graphics/textures/cc.bmp", true);
+	loadBMP(&texID + 2, "E:/SEM7/Computer Graphics/textures/metal.bmp", true);
+	glPopMatrix();
 	glutMainLoop();
 	
 }
 
+float x, y;
+
 void Display() {
-	glClearColor(0.1f, 0.0f, 0.1f, 0);//Dark Purple
-	glClear(GL_COLOR_BUFFER_BIT);
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
+	glPushMatrix();
+	glTranslated(x, y, 0);
+	glBindTexture(GL_TEXTURE_2D, texID+1);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f);			glVertex3f(0, 10, 0);
+	glTexCoord2f(rep, 0.0f);			glVertex3f(1000, 10, 0);
+	glTexCoord2f(rep, rep);				 glVertex3f(1000, -1000, 0);
+	glTexCoord2f(0.0f, rep);			 glVertex3f(0, -1000, 0);
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glTranslated(x, y, 0);
+	glBindTexture(GL_TEXTURE_2D, texID);
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f);			glVertex3f(0, 0, 0);
+	glTexCoord2f(rep, 0.0f);			glVertex3f(1000, 0, 0);
+	glTexCoord2f(rep, rep);				 glVertex3f(1000, 1000, 0);
+	glTexCoord2f(0.0f, rep);			 glVertex3f(0, 1000, 0);
+	glEnd();
+	glPopMatrix();
+
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texID + 2);
+	glPopMatrix();
 	if (lives <= 0)
 	{
 		glPushMatrix();
@@ -306,7 +346,7 @@ void Display() {
 	}
 //lives
 	glPushMatrix();
-	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
+
 	char* p0s[20];
 	sprintf_s((char *)p0s, 20, "X %d", lives);
 	print(45, 560, (char *)p0s);
@@ -316,6 +356,7 @@ void Display() {
 	glVertex3f(20, 560, 0.0f);
 	glVertex3f(35, 590, 0.0f);
 	glEnd();
+	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
 	glPopMatrix();
 
 //score
@@ -327,7 +368,7 @@ void Display() {
 	glPushMatrix();
 	glTranslated(attacker[0], attacker[1], 0);
 	glRotated(rotationAngleA,0,0,1);
-	glColor3f(0.0f, 0.0f, 1.0f);//Blue
+	glColor3f(215.0f, 50.0f, 0.0f);//Blue
 	//head
 	glBegin(GL_POLYGON);
 	glVertex3f(35, 20, 0.0f);
@@ -445,6 +486,7 @@ void Display() {
 
 
 //player
+	glColor4f(1, 1.0f, 1.0f, 1.0f);
 	glPushMatrix();
 	glTranslated(player[0], player[1], 0);
 	glRotated(rotationAngleP,0,0,1);
@@ -484,7 +526,6 @@ void Display() {
 	glVertex3f(85, 100.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-
 	glFlush();
 }
 
@@ -683,5 +724,8 @@ void Anim(){
 	
 	obsCount++;
 	defenderToTheRescueT++;
+	y += .1;
+	if (y >= 1000)
+		y = 0;
 	glutPostRedisplay();
 }
