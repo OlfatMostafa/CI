@@ -24,15 +24,13 @@ GLuint texID ;
 
 int rep = 1;
 int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
-powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA;
+powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA, randCurve;
 
-float attacker[2], player[2], fire[2], obs[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
-r1, fireMov, value, max_value, progress, progressBarWidth;
+float attacker[2], player[2], fire[2], obs[2], obsD[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
+r1, fireMov, value, max_value, progress, progressBarWidth, x, y, attackerOld[2], angle;
 
 bool fire2, rotateLeftp, rotateRightp, rotateLefta, rotateRighta, defRev, powerupToggle, powerupActivate, defenderToTheRescue, rev, rm, destroy,
-obsAttacker, fireToggle, lose = true, initf = true, inito = true;
-
-
+obsAttacker, obsDefender, fireToggle, lose = true, initf = true, inito = true;
 
 
 void destroy_window() {
@@ -46,10 +44,6 @@ void drawCircle(int x, int y, float r) {
 	glPushMatrix();
 	glColor3f(0.0f, 1.0f, 0.0f);//Green
 	glTranslatef(x, y, 0);
-	if (rotateLefta)
-		glRotatef(30, 0, 1, 0);
-	if (rotateRighta)
-		glRotatef(-30, 0, 1, 0);
 	GLUquadric *quadObj = gluNewQuadric();
 	gluDisk(quadObj, 0, r, 50, 50);
 	glPopMatrix();
@@ -60,10 +54,26 @@ void drawCircle(int x, int y, float r) {
 void shoot() {
 	glPushMatrix();
 	glTranslated(fire[0], fire[1], 0);
-	glPointSize(10);
-	glBegin(GL_POINTS);
+	//glPointSize(10);
 	glColor3f(225, 215, 0);//gold
-	glVertex3f(0, 0, 0);
+	glBegin(GL_TRIANGLES);
+	glVertex2f(0, -50);
+	glVertex2f(20, -50);
+	glVertex2f(10, -30);
+	glEnd();
+	glBegin(GL_LINES);
+	glVertex2f(10, -40);
+	glVertex2f(0, -30);
+	glVertex2f(0, -30);
+	glVertex2f(20, -20);
+	glVertex2f(20, -20);
+	glVertex2f(0, -10);
+	glEnd();
+	glBegin(GL_QUADS);
+	glVertex2f(0, -10);
+	glVertex2f(20, -10);
+	glVertex2f(20, 10);
+	glVertex2f(0, 10);
 	glEnd();
 	glPopMatrix();
 	glutPostRedisplay();
@@ -97,7 +107,6 @@ int* bezier(float t, int* p0, int* p1, int* p2, int* p3)
 	res[1] = pow((1 - t), 3)*p0[1] + 3 * t*pow((1 - t), 2)*p1[1] + 3 * pow(t, 2)*(1 - t)*p2[1] + pow(t, 3)*p3[1];
 	return res;
 }
-
 
 void mo(int x, int y)
 {
@@ -294,10 +303,8 @@ void main(int argc, char** argr) {
 	
 }
 
-float x, y;
-
 void Display() {
-	//glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glPushMatrix();
 	glTranslated(x, y, 0);
 	glBindTexture(GL_TEXTURE_2D, texID+1);
@@ -308,7 +315,8 @@ void Display() {
 	glTexCoord2f(0.0f, rep);			 glVertex3f(0, -1000, 0);
 	glEnd();
 	glPopMatrix();
-
+	glDisable(GL_BLEND);
+	glEnable(GL_BLEND);
 	glPushMatrix();
 	glTranslated(x, y, 0);
 	glBindTexture(GL_TEXTURE_2D, texID);
@@ -318,6 +326,8 @@ void Display() {
 	glTexCoord2f(rep, rep);				 glVertex3f(1000, 1000, 0);
 	glTexCoord2f(0.0f, rep);			 glVertex3f(0, 1000, 0);
 	glEnd();
+	glDisable(GL_BLEND);
+
 	glPopMatrix();
 
 	glPushMatrix();
@@ -413,7 +423,62 @@ void Display() {
 	glPopMatrix();
 
 //obstacles
-	drawCircle(obs[0], obs[1], 10);
+	//drawCircle(obs[0], obs[1], 10);
+	glPushMatrix();
+	glColor3f(1.0f, 0.5f, 0.0f);//Orange
+	glTranslated(obs[0], obs[1], 0);
+
+	glBegin(GL_QUADS);
+	glVertex2f(0, 0);
+	glVertex2f(-10, 0);
+	glVertex2f(-10, 10);
+	glVertex2f(0, 10);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 0);
+	glVertex2f(-10, 0);
+	glVertex2f(-20, -10);
+	glVertex2f(-10, -20);
+	glVertex2f(0, -20);
+	glVertex2f(10, -10);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glVertex2f(0, -20);
+	glVertex2f(-5, -30);
+	glVertex2f(-10, -20);
+	glEnd();
+	glPopMatrix();
+
+	//obstaclesD
+	//drawCircle(obs[0], obs[1], 10);
+	glPushMatrix();
+	glColor3f(1.0f, 0.5f, 0.0f);//Orange
+	glTranslated(obsD[0], obsD[1], 0);
+
+	glBegin(GL_QUADS);
+	glVertex2f(0, 0);
+	glVertex2f(-10, 0);
+	glVertex2f(-10, 10);
+	glVertex2f(0, 10);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+	glVertex2f(0, 0);
+	glVertex2f(-10, 0);
+	glVertex2f(-20, -10);
+	glVertex2f(-10, -20);
+	glVertex2f(0, -20);
+	glVertex2f(10, -10);
+	glEnd();
+
+	glBegin(GL_TRIANGLES);
+	glVertex2f(0, -20);
+	glVertex2f(-5, -30);
+	glVertex2f(-10, -20);
+	glEnd();
+	glPopMatrix();
 
 //defender
 	if (defenderToTheRescue)
@@ -482,9 +547,6 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 
-//obstacle
-
-
 //player
 	glColor4f(1, 1.0f, 1.0f, 1.0f);
 	glPushMatrix();
@@ -530,6 +592,8 @@ void Display() {
 }
 
 void Anim(){
+	
+	randCurve++;
 //powerups dropping
 	if (!powerupToggle)
 	{
@@ -576,8 +640,8 @@ void Anim(){
 //obstacles dropping from attacker
 	if (obsCount % 1000 == 0 && !obsAttacker)
 	{
-		obs[0] = attacker[0] + 50;
-		obs[1] = attacker[1] - 20;
+		obs[0] = attacker[0] ;
+		obs[1] = attacker[1] ;
 		obsAttacker = true;
 	}
 	if (obsAttacker){
@@ -585,11 +649,26 @@ void Anim(){
 			obsAttacker = false;
 		obs[1] --;
 	}
-
+//obstacles dropping from defender
+	if (obsCount % 2000 == 0 && !obsDefender)
+	{
+		obsD[0] = defender[0];
+		obsD[1] = defender[1];
+		obsDefender = true;
+	}
+	if (obsDefender){
+		if (obsD[1] <= -10)
+			obsDefender = false;
+		obsD[1] --;
+	}
+	attackerOld[0] = attacker[0];
+	attackerOld[1] = attacker[1];
 //attacker's new location
 	attacker[0] = bezier(t, p0, p1, p2, p3)[0];
 	attacker[1] = bezier(t, p0, p1, p2, p3)[1];
 
+	float slope = (attacker[1] - attackerOld[1]) / (attacker[0] - attackerOld[0]);
+	angle = atan(slope);
 //defender's movements
 	if (defenderToTheRescue)
 	{
@@ -605,21 +684,21 @@ void Anim(){
 			defRev = false;
 	}
 //randomization for new attacker's location
-	if (randMotion % 200 == 0)
-	{
-		//srand(static_cast <unsigned> (time(0)));
-		/*srand(time(NULL));*/
-		r1 = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1)));
-		rm = true;
-	}
-	if (rm)
-	{
-		if (t > r1)
-			rev = true;
-		else
-			rev = false;
-		rm = false;
-	}
+	//if (randMotion % 200 == 0)
+	//{
+	//	//srand(static_cast <unsigned> (time(0)));
+	//	/*srand(time(NULL));*/
+	//	r1 = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1)));
+	//	rm = true;
+	//}
+	//if (rm)
+	//{
+	//	if (t > r1)
+	//		rev = true;
+	//	else
+	//		rev = false;
+	//	rm = false;
+	//}
 	if (t >= 1)
 	{
 		rev = true;
@@ -634,6 +713,8 @@ void Anim(){
 			rotationAngleA = 0;
 			rev = false;
 			t = 0;		
+			p2[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1000)));
+			p3[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1000)));
 		}
 	}
 	else
@@ -666,7 +747,6 @@ void Anim(){
 			fire[1] = player[1];
 			fire2 = false;
 			initf = true;
-
 		}
 		else if ((fire[0] <= attacker[0] + 100 && fire[0] >= attacker[0]) && (fire[1] <= attacker[1] + 50 && fire[1] >= attacker[1] - 50)){
 			PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\pain.wav", 0, SND_FILENAME | SND_ASYNC);
@@ -701,15 +781,33 @@ void Anim(){
 		{
 			lives--;
 			if (lives <= 0)
-			obs[0] = attacker[0] + 50;
-			obs[1] = attacker[1] - 20;
+			obs[0] = attacker[0] ;
+			obs[1] = attacker[1] ;
+		}
+	if (obsDefender)
+		if ((obsD[0] <= player[0] + 75 && obsD[0] >= player[0] + 25) && (obsD[1] <= player[1] + 25 && obsD[1] >= player[1]))
+		{
+			lives--;
+			if (lives <= 0)
+				obsD[0] = attacker[0];
+			obsD[1] = attacker[1];
 		}
 //powerups acquiring
 	if (powerupActivate)
 	{
 		if ((powerupTranslationX[0] + 65 <= player[0] + 75 && powerupTranslationX[0] + 65 >= player[0] + 25) && (powerupTranslationY[0] + 40 <= player[1] + 25 && powerupTranslationY[0] + 40 >= player[1]))
 		{
-			lives++;
+			PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\pain.wav", 0, SND_FILENAME | SND_ASYNC);
+			value -= 5;
+			if (max_value / value >= 2)
+				defenderToTheRescue = true;
+			if (value <= 0)
+			{
+				max_value /= 0.2;
+				value = max_value;
+				score++;
+				PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\kill.wav", 0, SND_FILENAME | SND_ASYNC);
+			}
 			powerupTranslationY[0] = 1000;
 		}
 		if ((powerupTranslationX[1] + 620 <= player[0] + 75 && powerupTranslationX[1] + 620 >= player[0] + 25) && (powerupTranslationY[1] + 60 <= player[1] + 25 && powerupTranslationY[1] + 60 >= player[1]))
