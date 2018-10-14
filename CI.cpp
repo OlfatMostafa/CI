@@ -23,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 GLuint texID ;
 
 int rep = 1;
-int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
+int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 100, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
 powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA, randCurve;
 
 float attacker[2], player[2], fire[2], obs[2], obsD[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
@@ -494,6 +494,7 @@ void Display() {
 		glEnd();
 		glPopMatrix();
 	}
+
 //progress bar
 	glPushMatrix();
 	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);//light blue
@@ -760,6 +761,9 @@ void Anim(){
 				max_value /= 0.2;
 				value = max_value;
 				score++;
+				defender[0] = 0;
+				defender[1] = 0;
+				defenderToTheRescue = false;
 				PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\kill.wav", 0, SND_FILENAME | SND_ASYNC);
 			}
 
@@ -806,6 +810,7 @@ void Anim(){
 				max_value /= 0.2;
 				value = max_value;
 				score++;
+				defenderToTheRescue = false;
 				PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\kill.wav", 0, SND_FILENAME | SND_ASYNC);
 			}
 			powerupTranslationY[0] = 1000;
