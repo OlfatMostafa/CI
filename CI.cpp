@@ -23,7 +23,7 @@ int _tmain(int argc, _TCHAR* argv[])
 GLuint texID ;
 
 int rep = 1;
-int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 100, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
+int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
 powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA, randCurve;
 
 float attacker[2], player[2], fire[2], obs[2], obsD[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
@@ -593,7 +593,6 @@ void Display() {
 }
 
 void Anim(){
-	
 	randCurve++;
 //powerups dropping
 	if (!powerupToggle)
@@ -669,7 +668,7 @@ void Anim(){
 	attacker[1] = bezier(t, p0, p1, p2, p3)[1];
 
 	float slope = (attacker[1] - attackerOld[1]) / (attacker[0] - attackerOld[0]);
-	angle = atan(slope);
+	rotationAngleA = atan(slope);
 //defender's movements
 	if (defenderToTheRescue)
 	{
