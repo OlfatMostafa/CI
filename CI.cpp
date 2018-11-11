@@ -20,13 +20,13 @@ int _tmain(int argc, _TCHAR* argv[])
 #include <ctime>
 
 #define GLUT_KEY_ESCAPE 27
-GLuint texID ;
+GLuint texID;
 
 int rep = 1;
-int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1, 
+int keyC, speC, obsCount, p0[2], p1[2], p2[2], p3[2], lives = 1, tar = 4, randMotion, score, randPowerupTime, window_valid = 1,
 powerupTimer, w = 1920, h = 1080, defenderToTheRescueT, rotationAngleP, rotationAngleA, randCurve;
 
-float attacker[2], player[2], fire[2], obs[2], obsD[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t, 
+float attacker[2], player[2], fire[2], obs[2], obsD[2], powerUp[2], defender[2], powerupTranslationX[2], powerupTranslationY[2], attackerHealthPoint, t,
 r1, fireMov, value, max_value, progress, progressBarWidth, x, y, attackerOld[2], angle;
 
 bool fire2, rotateLeftp, rotateRightp, rotateLefta, rotateRighta, defRev, powerupToggle, powerupActivate, defenderToTheRescue, rev, rm, destroy,
@@ -178,9 +178,9 @@ void spe(int k, int x, int y)// keyboard special key function takes 3 parameters
 		rotationAngleP = -10;
 		player[0] += 10;
 		rotateRightp = true;
-		if (player[0] >= (925 -10))
+		if (player[0] >= (925 - 10))
 		{
-			player[0] = 925 -10;
+			player[0] = 925 - 10;
 		}
 	}
 
@@ -191,9 +191,9 @@ void spe(int k, int x, int y)// keyboard special key function takes 3 parameters
 		rotationAngleP = 10;
 		player[0] -= 10;
 		rotateLeftp = true;
-		if (player[0] <= -25+10 )
+		if (player[0] <= -25 + 10)
 		{
-			player[0] = -25+10;
+			player[0] = -25 + 10;
 		}
 	}
 	//if (k == GLUT_KEY_UP)//if the up arrow is pressed, then the object will be translated in the y axis by 10. (moving upwords)
@@ -232,7 +232,7 @@ void key(unsigned char k, int x, int y)//keyboard function, takes 3 parameters
 		player[1] -= 10;
 	if (k == ' ')//if the letter b is pressed, the player fires
 	{
-		PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\Bomb+2.wav", 0, SND_FILENAME|SND_ASYNC);
+		PlaySound(L"E:\\SEM7\\Computer Graphics\\CI\\Bomb+2.wav", 0, SND_FILENAME | SND_ASYNC);
 		fire2 = true;
 		//PlaySound((LPCWSTR)"E:\SEM7\Computer Graphics\CI\gun-cocking-01.wav", 0, SND_ASYNC | SND_FILENAME |[B]SND_FILENAME[/B]);
 	}
@@ -296,18 +296,18 @@ void main(int argc, char** argr) {
 	glutSpecialUpFunc(speUp);		//call the keyboard special keys up function
 	glPushMatrix();
 	loadBMP(&texID, "E:/SEM7/Computer Graphics/textures/cc.bmp", true);
-	loadBMP(&texID+1, "E:/SEM7/Computer Graphics/textures/cc.bmp", true);
+	loadBMP(&texID + 1, "E:/SEM7/Computer Graphics/textures/cc.bmp", true);
 	loadBMP(&texID + 2, "E:/SEM7/Computer Graphics/textures/metal.bmp", true);
 	glPopMatrix();
 	glutMainLoop();
-	
+
 }
 
 void Display() {
 	glEnable(GL_BLEND);
 	glPushMatrix();
 	glTranslated(x, y, 0);
-	glBindTexture(GL_TEXTURE_2D, texID+1);
+	glBindTexture(GL_TEXTURE_2D, texID + 1);
 	glBegin(GL_QUADS);
 	glTexCoord2f(0.0f, 0.0f);			glVertex3f(0, 10, 0);
 	glTexCoord2f(rep, 0.0f);			glVertex3f(1000, 10, 0);
@@ -354,7 +354,7 @@ void Display() {
 	if (window_valid == -1){
 		destroy = true;
 	}
-//lives
+	//lives
 	glPushMatrix();
 
 	char* p0s[20];
@@ -369,15 +369,15 @@ void Display() {
 	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
 	glPopMatrix();
 
-//score
+	//score
 	char* p1s[20];
 	sprintf_s((char *)p1s, 20, "Score:  %d", score);
 	print(745, 560, (char *)p1s);
 
-//attacker
+	//attacker
 	glPushMatrix();
 	glTranslated(attacker[0], attacker[1], 0);
-	glRotated(rotationAngleA,0,0,1);
+	glRotated(rotationAngleA, 0, 0, 1);
 	glColor3f(215.0f, 50.0f, 0.0f);//Blue
 	//head
 	glBegin(GL_POLYGON);
@@ -422,7 +422,7 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 
-//obstacles
+	//obstacles
 	//drawCircle(obs[0], obs[1], 10);
 	glPushMatrix();
 	glColor3f(1.0f, 0.5f, 0.0f);//Orange
@@ -480,7 +480,7 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 
-//defender
+	//defender
 	if (defenderToTheRescue)
 	{
 		glPushMatrix();
@@ -495,7 +495,7 @@ void Display() {
 		glPopMatrix();
 	}
 
-//progress bar
+	//progress bar
 	glPushMatrix();
 	glColor4f(0.0f, 1.0f, 1.0f, 1.0f);//light blue
 	glBegin(GL_QUADS);
@@ -516,14 +516,14 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 
-//fire
+	//fire
 
 	if (fire2) {
 		glPushMatrix();
 		shoot();
 		glPopMatrix();
 	}
-//powerup1
+	//powerup1
 	glPushMatrix();
 	glTranslated(powerupTranslationX[0], powerupTranslationY[0], 0);
 	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
@@ -536,7 +536,7 @@ void Display() {
 	glVertex3f(80, 50.0f, 0.0f);
 	glEnd();
 	glPopMatrix();
-//powerup2
+	//powerup2
 	glPushMatrix();
 	glTranslated(powerupTranslationX[1], powerupTranslationY[1], 0);
 	glColor4f(1.0f, 0.0f, 0.0f, 0.0f);//red
@@ -548,11 +548,11 @@ void Display() {
 	glEnd();
 	glPopMatrix();
 
-//player
+	//player
 	glColor4f(1, 1.0f, 1.0f, 1.0f);
 	glPushMatrix();
 	glTranslated(player[0], player[1], 0);
-	glRotated(rotationAngleP,0,0,1);
+	glRotated(rotationAngleP, 0, 0, 1);
 	//body
 	glBegin(GL_POLYGON);
 	glVertex3f(50.0f, 0.0f, 0.0f);
@@ -594,7 +594,7 @@ void Display() {
 
 void Anim(){
 	randCurve++;
-//powerups dropping
+	//powerups dropping
 	if (!powerupToggle)
 	{
 		if ((powerupTimer % 3 == 0))
@@ -617,7 +617,7 @@ void Anim(){
 			powerupToggle = true;
 		}
 	}
-	else if ((randPowerupTime % 5 == 0) )
+	else if ((randPowerupTime % 5 == 0))
 	{
 		powerupActivate = true;
 		powerupTranslationY[1] = 1000;
@@ -636,12 +636,12 @@ void Anim(){
 		powerupTranslationX[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (500)));
 		powerupToggle = false;
 	}
-	
-//obstacles dropping from attacker
+
+	//obstacles dropping from attacker
 	if (obsCount % 1000 == 0 && !obsAttacker)
 	{
-		obs[0] = attacker[0] ;
-		obs[1] = attacker[1] ;
+		obs[0] = attacker[0];
+		obs[1] = attacker[1];
 		obsAttacker = true;
 	}
 	if (obsAttacker){
@@ -649,7 +649,7 @@ void Anim(){
 			obsAttacker = false;
 		obs[1] --;
 	}
-//obstacles dropping from defender
+	//obstacles dropping from defender
 	if (obsCount % 2000 == 0 && !obsDefender)
 	{
 		obsD[0] = defender[0];
@@ -663,13 +663,13 @@ void Anim(){
 	}
 	attackerOld[0] = attacker[0];
 	attackerOld[1] = attacker[1];
-//attacker's new location
+	//attacker's new location
 	attacker[0] = bezier(t, p0, p1, p2, p3)[0];
 	attacker[1] = bezier(t, p0, p1, p2, p3)[1];
 
 	float slope = (attacker[1] - attackerOld[1]) / (attacker[0] - attackerOld[0]);
 	rotationAngleA = atan(slope);
-//defender's movements
+	//defender's movements
 	if (defenderToTheRescue)
 	{
 		defender[1] = 205;
@@ -683,7 +683,7 @@ void Anim(){
 		else if (defender[0] <= 0)
 			defRev = false;
 	}
-//randomization for new attacker's location
+	//randomization for new attacker's location
 	//if (randMotion % 200 == 0)
 	//{
 	//	//srand(static_cast <unsigned> (time(0)));
@@ -712,7 +712,7 @@ void Anim(){
 		{
 			rotationAngleA = 0;
 			rev = false;
-			t = 0;		
+			t = 0;
 			p2[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1000)));
 			p3[0] = 0 + static_cast <float> (rand()) / (static_cast <float> (RAND_MAX / (1000)));
 		}
@@ -724,15 +724,15 @@ void Anim(){
 	}
 	randMotion++;
 
-//fire
+	//fire
 	if (fire2) {
 		if (initf)
 		{
 			if (!fireToggle)
 			{
-			fire[0] = player[0] + 25;
-			fire[1] = 100;
-			fireToggle = true;
+				fire[0] = player[0] + 25;
+				fire[1] = 100;
+				fireToggle = true;
 
 			}
 			else
@@ -778,24 +778,24 @@ void Anim(){
 			fire[1] += 2;
 
 	}
-//obstacles hitting player
+	//obstacles hitting player
 	if (obsAttacker)
 		if ((obs[0] <= player[0] + 75 && obs[0] >= player[0] + 25) && (obs[1] <= player[1] + 25 && obs[1] >= player[1]))
 		{
 			lives--;
 			if (lives <= 0)
-			obs[0] = attacker[0] ;
-			obs[1] = attacker[1] ;
+				obs[0] = 0;
+			obs[1] = 0;
 		}
 	if (obsDefender)
 		if ((obsD[0] <= player[0] + 75 && obsD[0] >= player[0] + 25) && (obsD[1] <= player[1] + 25 && obsD[1] >= player[1]))
 		{
 			lives--;
 			if (lives <= 0)
-				obsD[0] = attacker[0];
-			obsD[1] = attacker[1];
+				obsD[0] = 0;
+			obsD[1] = 0;
 		}
-//powerups acquiring
+	//powerups acquiring
 	if (powerupActivate)
 	{
 		if ((powerupTranslationX[0] + 65 <= player[0] + 75 && powerupTranslationX[0] + 65 >= player[0] + 25) && (powerupTranslationY[0] + 40 <= player[1] + 25 && powerupTranslationY[0] + 40 >= player[1]))
@@ -819,11 +819,11 @@ void Anim(){
 			lives++;
 			powerupTranslationY[1] = 1000;
 		}
-			powerupActivate = false;
+		powerupActivate = false;
 	}
 	progress = value / max_value;
 	progressBarWidth = progress * 400;
-	
+
 	obsCount++;
 	defenderToTheRescueT++;
 	y += .1;
